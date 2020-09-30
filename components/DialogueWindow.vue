@@ -1,7 +1,7 @@
 <template>
   <div class="dialog-window">
     <div class="dialog-window_messages">
-      <div v-if="!loader.visible && currentDialogue">
+      <div v-if="!components.loader.visible && currentDialogue">
         <template v-for="message in currentDialogue.parts">
           <message-item :message="message" :key="message.id" />
         </template>
@@ -18,6 +18,8 @@
 import AddMessageInput from "@/components/AddMessageInput";
 import MessageItem from "@/components/MessageItem";
 import Loader from "@/components/Loader";
+import { mapGetters } from "vuex";
+
 export default {
   components: {
     AddMessageInput,
@@ -25,12 +27,10 @@ export default {
     Loader
   },
   computed: {
-    currentDialogue() {
-      return this.$store.getters["dialogues/currentDialogue"];
-    },
-    loader() {
-      return this.$store.getters["components/components"].loader;
-    }
+    ...mapGetters({
+      currentDialogue: "dialogues/currentDialogue",
+      components: "components/components"
+    })
   },
   methods: {
     addMessage(text) {
@@ -41,7 +41,10 @@ export default {
         text: text
       };
 
-      this.$store.commit('dialogues/addMessage', {message, id: this.currentDialogue.id});
+      this.$store.commit("dialogues/addMessage", {
+        message,
+        id: this.currentDialogue.id
+      });
     }
   }
 };

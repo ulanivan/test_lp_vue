@@ -9,6 +9,7 @@
 import { data } from "../fakeData";
 import DialoguesList from "@/components/DialoguesList";
 import DialogueWindow from "@/components/DialogueWindow";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   components: {
@@ -16,13 +17,19 @@ export default {
     DialogueWindow
   },
   mounted() {
-    this.$store.commit("dialogues/setDialogues", data);
-    this.$store.commit("dialogues/setCurrentDialogue", this.dialogues[0]);
+    this.setDialogues(data);
+    this.setCurrentDialogue(this.dialogues[0]);
+  },
+  methods: {
+    ...mapMutations({
+      setDialogues: "dialogues/setDialogues",
+      setCurrentDialogue: "dialogues/setCurrentDialogue"
+    })
   },
   computed: {
-    dialogues() {
-      return this.$store.getters["dialogues/dialogues"];
-    }
+    ...mapGetters({
+      dialogues: "dialogues/dialogues"
+    })
   }
 };
 </script>
